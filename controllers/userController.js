@@ -17,7 +17,7 @@ exports.registerUser = (req, res) => {
       return res.status(500).json({ error: err.message });
     }
     // Registration successful
-    console.log('Registration successful for user:', user);
+    // console.log('Registration successful for user:', user);
     res.status(200).json({ 
         message: 'Registration successful' ,
         token,
@@ -48,8 +48,10 @@ exports.loginUser = (req, res, next) => {
         }
   
         // If login is successful, respond with a success message or user details
-        console.log('Login successful for user:', user);
-        return res.status(200).json({ message: 'Login successful', user });
+        // console.log('Login successful for user:', user);
+        const token = user.generateJWT();
+        const userId = user._id;
+        return res.status(200).json({ message: 'Login successful', userId,token });
       });
     })(req, res, next);
   };

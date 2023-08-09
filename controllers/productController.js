@@ -25,7 +25,7 @@ exports.getItemsName = (req, res) => {
   // Query the database for top-selling products and select only the 'name' field
   Item.find({}, 'name')
     .then((products) => {
-      console.log(products);
+     
       // Extract the names from the query result and create an array of names
      
       return res.json(products); // Send only the array of names in the response

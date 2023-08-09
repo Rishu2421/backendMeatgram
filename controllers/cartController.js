@@ -5,7 +5,7 @@ const cartController = {
   addItemToCart: async (req, res) => {
     const { userId, itemId, quantity } = req.body;
 
-    console.log(req.body);
+    // console.log(req.body);
     try {
       // Find the user by their ID
       const user = await User.findById(userId);
@@ -13,7 +13,7 @@ const cartController = {
       if (!user) {
         return res.status(404).json({ error: 'User not found' });
       }
-      console.log(itemId)
+      // console.log(itemId)
       // Add the item to the user's cart
       user.cartItems.push({ item: itemId, quantity });
       await user.save();

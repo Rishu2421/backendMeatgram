@@ -1,21 +1,20 @@
-const dotenv = require('dotenv'); // Add this line
-
-dotenv.config({ path: './config.env' }); 
+const dotenv = require('dotenv');
 const passport = require('passport');
 const { User } = require('../models/userModel');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const LocalStrategy = require('passport-local').Strategy;
+dotenv.config({ path: './config.env' }); 
 
 passport.use(new LocalStrategy({ usernameField: 'email' }, User.authenticate()));
+
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
-console.log('CLIENTID:', process.env.CLIENT_ID);
 
 passport.use(
   new GoogleStrategy(
     {
-      clientID: "112143794452-lba6liu40kfa977s9fkf540vcbsl8rib.apps.googleusercontent.com",
-      clientSecret: "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",
+      clientID: process.env.CLIENT_ID,
+      clientSecret: process.env.CLIENT_SECRET,
       callbackURL: "https://chersmeatgram.com/api/user/auth/google/meatgram",
       userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo",
     },
@@ -56,3 +55,101 @@ passport.use(
 
 
 module.exports = passport; // Add this line to export the configured passport object
+
+
+// // config/passport.js
+
+// const passport = require('passport');
+// const LocalStrategy = require('passport-local').Strategy;
+// const {User} = require('../models/userModel');
+// const GoogleStrategy = require('passport-google-oauth20').Strategy;
+
+// passport.use(new LocalStrategy({ usernameField: 'email' }, User.authenticate()));
+
+// passport.serializeUser(User.serializeUser());
+// passport.deserializeUser(User.deserializeUser());
+
+// passport.use(
+//   new GoogleStrategy(
+//     {
+
+//       clientID: process.env.CLIENT_ID,
+//       clientSecret: process.env.CLIENT_SECRET,
+//       callbackURL: "http://localhost:3001/api/user/auth/google/meatgram",
+//       userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo",
+//     },
+//     function (accessToken, refreshToken, profile, cb) {
+//       console.log(profile);
+
+//       User.findOrCreate(
+//         {
+//           googleId: profile.id,
+//           username: profile.displayName,
+//           email: profile.emails[0].value,
+//           profilePicture: profile.picture,
+//         },
+//         function (err, user) {
+//           // profilePic = profile.photos[0].value;
+//           // userName = profile.name.givenName;
+//           // // console.log(user);
+//           // userId = user._id;
+//           // console.log(userId);
+//           return cb(err, user);
+//         }
+//       );
+//     }
+//   )
+// );
+// module.exports = passport; // Add this line to export the configured passport object
+
+
+// const passport = require('passport');
+// const LocalStrategy = require('passport-local').Strategy;
+// const bcrypt = require('bcrypt');
+// const User = require('../models/userModel'); // Replace with your User model file path
+// const session = require('express-session');
+
+
+// // const MongoStore = require('connect-mongo')(session);
+
+// passport.use(new LocalStrategy(User.authenticate()));
+
+// passport.use(User.createStrategy());
+// passport.serializeUser(User.serializeUser());
+// passport.deserializeUser(User.deserializeUser());
+// passport.serializeUser(function (user, done) {
+//   done(null, user.id);
+// });
+
+// passport.deserializeUser(function (id, done) {
+//   User.findById(id, function (err, user) {
+//     done(err, user);
+//   });
+// });
+// passport.use(
+//   new LocalStrategy(
+//     { usernameField: 'email' },
+//     (email, password, done) => {
+//       // Match user
+//       User.findOne({ email: email })
+//         .then((user) => {
+//           if (!user) {
+//             return done(null, false, { message: 'Incorrect email or password' });
+//           }
+
+//           // Match password
+//           bcrypt.compare(password, user.password, (err, isMatch) => {
+//             if (err) throw err;
+//             if (isMatch) {
+//               return done(null, user);
+//             } else {
+//               return done(null, false, { message: 'Incorrect email or password' });
+//             }
+//           });
+//         })
+//         .catch((err) => console.log(err));
+//     }
+//   )
+// );
+
+

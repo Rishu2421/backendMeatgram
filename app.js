@@ -1,5 +1,6 @@
 //app.js
 const dotenv = require('dotenv');
+dotenv.config({ path : "./config/config.env"});
 
 const express = require('express');
 const app = express();
@@ -11,8 +12,7 @@ const categoryRoute = require('./routes/categoriesRoutes');
 const cartRoute = require('./routes/cartRoute');
 const paymentRoute = require('./routes/paymentRoutes.js')
 const orderRoutes = require('./routes/orderRoute');
-
-dotenv.config({ path : "./config/config.env"});
+const passportConfig = require('./config/passport-setup');
 const passport = require('passport');
 const session = require('express-session');
 
@@ -30,7 +30,7 @@ app.use(
     saveUninitialized: false,
   })
 );
-const allowedOrigins = ['https://62.72.12.204/','http://localhost:3000/','http://62.72.12.204/'];
+const allowedOrigins = ['http://localhost:3000', 'http://localhost:3001'];
 
 app.use(cors({
   origin: allowedOrigins,
@@ -48,11 +48,8 @@ app.use('/api/payment',paymentRoute)
 app.use('/api/orders', orderRoutes);
 
 app.get("/api/getkey",(req,res)=>{
-  console.log("Here in appi get key ")
   res.status(200).json({key:process.env.RAZORPAY_API_KEY})
 });
-
-
 
 module.exports = app
 

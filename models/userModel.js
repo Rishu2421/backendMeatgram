@@ -1,9 +1,11 @@
 // User.js
+const dotenv = require('dotenv'); // Add this line
 
 const { Schema,model} = require('mongoose');
 const passportLocalMongoose = require('passport-local-mongoose');
 const jwt= require('jsonwebtoken');
 const findOrCreate = require('mongoose-findorcreate')
+dotenv.config({ path: '../config/config.env' }); 
 
 
 

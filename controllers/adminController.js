@@ -48,55 +48,55 @@ module.exports.authenticate = async (req, res) => {
   const upload = multer({ storage: storage });
   
   module.exports.addProducts = async (req, res) => {
-    upload.single('image')(req, res, function (err) {
-      if (err) {
-        console.error('Error uploading file:', err);
-        return res.status(500).json({ error: 'Failed to upload file' });
-      }
-  
-      // File upload successful, continue with product creation
-      const {
-        name,
-        price,
-        quantity,
-        numOfPieces,
-        description,
-        mrp,
-        discount,
-        category,
-        isTopSelling,
-        isBoneless,
-      } = req.body;
-      const image = req.file ? `/uploads/${req.file.filename}` : 'notprovided';
-  
-      // Create a new item object
-      const newItem = new Item({
-        name,
-        price,
-        image,
-        quantity,
-        numOfPieces,
-        description,
-        mrp,
-        discount,
-        category,
-        isTopSelling,
-        isBoneless,
-      });
-  
-      // Save the new item to the database
-      newItem
-        .save()
-        .then((createdItem) => {
-          console.log('New item created:', createdItem);
-          return res.status(201).json(createdItem);
-        })
-        .catch((error) => {
-          console.error('Error creating item:', error);
-          return res.status(500).json({ error: 'Failed to create item' });
-        });
+  upload.single('image')(req, res, function (err) {
+    if (err) {
+      console.error('Error uploading file:', err);
+      return res.status(500).json({ error: 'Failed to upload file' });
+    }
+
+    // File upload successful, continue with product creation
+    const {
+      name,
+      price,
+      quantityAndMrp, // Updated to handle quantity and mrp as an array
+      numOfPieces,
+      description,
+      mrp,
+      discount,
+      category,
+      isTopSelling,
+      isBoneless,
+    } = req.body;
+    const image = req.file ? `/uploads/${req.file.filename}` : 'notprovided';
+
+    // Create a new item object
+    const newItem = new Item({
+      name,
+      price,
+      image,
+      quantityAndMrp: JSON.parse(quantityAndMrp), // Parse the JSON string to an array
+      numOfPieces,
+      description,
+      mrp,
+      discount,
+      category,
+      isTopSelling,
+      isBoneless,
     });
-  };
+
+    // Save the new item to the database
+    newItem
+      .save()
+      .then((createdItem) => {
+        console.log('New item created:', createdItem);
+        return res.status(201).json(createdItem);
+      })
+      .catch((error) => {
+        console.error('Error creating item:', error);
+        return res.status(500).json({ error: 'Failed to create item' });
+      });
+  });
+};
   
  
 module.exports.addCategory = (req, res) => {

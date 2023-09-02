@@ -109,6 +109,7 @@ module.exports.savePaymentDetails=async (req,res)=> {
         address,
         userId,
         amount,
+        storeLocation,
         razorpay_order_id,
         razorpay_payment_id,
         razorpay_signature, 
@@ -128,7 +129,6 @@ module.exports.savePaymentDetails=async (req,res)=> {
         })
       );
   
-      console.log(items);
       
     
   
@@ -138,6 +138,7 @@ module.exports.savePaymentDetails=async (req,res)=> {
       address,
       userId,
       amount,
+      storeLocation,
       items,
       razorpay_order_id,
       razorpay_payment_id,
@@ -194,6 +195,7 @@ module.exports.cashOnDelivery = async (req, res) => {
       address,
       userId,
       amount,
+      storeLocation,
 
     } = req.body;
 
@@ -223,6 +225,7 @@ module.exports.cashOnDelivery = async (req, res) => {
       address,
       userId,
       amount,
+      storeLocation,
       isCashOnDelivery: true,
       items,
     });

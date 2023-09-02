@@ -13,6 +13,7 @@ module.exports.getCategories = async (req, res) => {
 
 module.exports.getCategoryProducts = async (req, res) => {
   const { categoryname } = req.params;
+  
   try {
     // Find all items that match the specified category name
     const products = await Item.find({ category: categoryname });

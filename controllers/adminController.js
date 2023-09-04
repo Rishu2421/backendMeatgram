@@ -64,6 +64,7 @@ module.exports.authenticate = async (req, res) => {
       mrp,
       discount,
       category,
+      subcategory,
       isTopSelling,
       isBoneless,
     } = req.body;
@@ -80,6 +81,7 @@ module.exports.authenticate = async (req, res) => {
       mrp,
       discount,
       category,
+      subcategory,
       isTopSelling,
       isBoneless,
     });
@@ -100,33 +102,35 @@ module.exports.authenticate = async (req, res) => {
   
  
 module.exports.addCategory = (req, res) => {
-    upload.single('image')(req, res, function (err) {
-      if (err) {
-        console.error('Error uploading file:', err);
-        return res.status(500).json({ error: 'Failed to upload file' });
-      }
-  
-      // File upload successful, continue with category creation
-      const { name } = req.body;
-      const imageUrl = req.file ? `/uploads/${req.file.filename}` : 'notprovided';
-  
-      const category = new Category({
-        name,
-        imageUrl,
-      });
-  
-      category
-        .save()
-        .then((createdCategory) => {
-          console.log('New category created:', createdCategory);
-          return res.status(201).json(createdCategory);
-        })
-        .catch((error) => {
-          console.error('Error creating category:', error);
-          return res.status(500).json({ error: 'Failed to create category' });
-        });
+  upload.single('image')(req, res, function (err) {
+    if (err) {
+      console.error('Error uploading file:', err);
+      return res.status(500).json({ error: 'Failed to upload file' });
+    }
+
+    // File upload successful, continue with category creation
+    const { name, subcategories } = req.body;
+    const imageUrl = req.file ? `/uploads/${req.file.filename}` : 'notprovided';
+
+    const category = new Category({
+      name,
+      imageUrl,
+      subcategories, // Add the subcategories field to the Category model
     });
-  };
+
+    category
+      .save()
+      .then((createdCategory) => {
+        console.log('New category created:', createdCategory);
+        return res.status(201).json(createdCategory);
+      })
+      .catch((error) => {
+        console.error('Error creating category:', error);
+        return res.status(500).json({ error: 'Failed to create category' });
+      });
+  });
+};
+
 
 
 

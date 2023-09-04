@@ -3,27 +3,35 @@ const { User } = require('../models/userModel');
 const cartController = {
 
   addItemToCart: async (req, res) => {
-    const { userId, itemId, quantity } = req.body;
-
-    // console.log(req.body);
+    const { userId, itemId, quantity, selectedQuantityAndMrp } = req.body;
+  
+    console.log(req.body)
     try {
       // Find the user by their ID
       const user = await User.findById(userId);
-
+  
       if (!user) {
         return res.status(404).json({ error: 'User not found' });
       }
-      // console.log(itemId)
+  
+      // Create an object to represent the item with selected quantity and Mrp
+      const itemWithQuantityAndMrp = {
+        item: itemId,
+        quantity,
+        selectedQuantityAndMrp,
+      };
+  
       // Add the item to the user's cart
-      user.cartItems.push({ item: itemId, quantity });
+      user.cartItems.push(itemWithQuantityAndMrp);
       await user.save();
-
+  
       return res.status(200).json({ message: 'Item added to cart successfully' });
     } catch (error) {
       console.error(error);
       return res.status(500).json({ error: 'Internal server error' });
     }
   },
+  
 getCartItems: async (req, res) => {
   try {
     // console.log(req.user)

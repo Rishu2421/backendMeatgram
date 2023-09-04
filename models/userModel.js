@@ -29,6 +29,20 @@ const userSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Item',
       },
+      selectedQuantityAndMrp: {
+        quantity: {
+          type: String,
+          required: true,
+        },
+        numOfPieces: {
+          type: Number,
+          required: true,
+        },
+        mrp: {
+          type: Number,
+          required: true,
+        },
+      },
       quantity: {
         type: Number,
         default: 1,
@@ -57,3 +71,4 @@ userSchema.methods.generateJWT  = function(){
 };
 
 module.exports.User = model('User', userSchema);
+

@@ -22,6 +22,20 @@ const orderSchema = new Schema(
           ref: 'Item',
           autopopulate: true,
         },
+        selectedQuantityAndMrp: {
+        quantity: {
+          type: String,
+          required: true,
+        },
+        numOfPieces: {
+          type: Number,
+          required: true,
+        },
+        mrp: {
+          type: Number,
+          required: true,
+        },
+      },
         quantity: {
           type: Number,
           default: 1,

@@ -6,6 +6,7 @@ const Order = require('../models/orders');
 dotenv.config({ path: path.join(__dirname, '..', 'config', 'config.env') });
 const { User } = require('../models/userModel');
 const Item = require('../models/Item');
+const { sendTelegramMessage } = require('../Telegram/telegramBot');
 
 const instance = new Razorpay({
     key_id: process.env.RAZORPAY_API_KEY,
@@ -125,6 +126,7 @@ module.exports.savePaymentDetails=async (req,res)=> {
           return {
             item,
             quantity: cartItem.quantity,
+            selectedQuantityAndMrp:cartItem.selectedQuantityAndMrp
           };
         })
       );
@@ -155,7 +157,17 @@ module.exports.savePaymentDetails=async (req,res)=> {
 
         const token = user.generateJWT();
         if (order) {
-         
+            const chatId = '1253242062'; // Replace with your actual chat ID
+            const orderedItems = order.items.map((item) => `${item.quantity} x ${item.item.name} \n selectedQuantity: ${item.selectedQuantityAndMrp}`).join('\n');
+
+            const message = `New order placed!\nOrder ID: ${order._id}\nOrder Total Amount: ${order.amount}\n\n` +
+            `User Name: ${name}\n` +
+            `User Address: ${address}  ${pincode}\n` +
+            `User Mobile Number: ${mobileNumber}\n\n` +
+            `Ordered Items:\n${orderedItems}\n`+
+            `Payment Type : Online paid Payment Id ${razorpay_order_id}`;
+   
+            sendTelegramMessage(chatId, message);
           return res.status(200).json({
             success: true,
             token,
@@ -213,12 +225,12 @@ module.exports.cashOnDelivery = async (req, res) => {
         return {
           item,
           quantity: cartItem.quantity,
+          selectedQuantityAndMrp:cartItem.selectedQuantityAndMrp
         };
       })
     );
 
-    console.log(items);
-    
+   
     const order = await Order.create({
       name,
       mobileNumber,
@@ -238,12 +250,29 @@ module.exports.cashOnDelivery = async (req, res) => {
         user.orders.push(order);
         await user.save();
 
-   
-    res.status(200).json({
-      success: true,
-      paymentMethod:"CashOnDelivery",
+         if (order) {
+            const chatId = '1253242062'; // Replace with your actual chat ID
+            const orderedItems = order.items.map((item) => `${item.quantity} x ${item.item.name} \n selectedQuantity: ${item.selectedQuantityAndMrp}`).join('\n');
+    
+            const message = `New order placed!\nOrder ID: ${order._id}\nOrder Total Amount: ${order.amount}\n\n` +
+            `User Name: ${name}\n` +
+            `User Address: ${address} ${pincode}\n` +
+            `User Mobile Number: ${mobileNumber}\n\n` +
+            `Ordered Items:\n${orderedItems}\n`+
+            `Payment Type : Cash On delievery`;
+
+            
+    sendTelegramMessage(chatId, message);
+          return res.status(200).json({
+            success: true,
+             paymentMethod:"CashOnDelivery",
       isCashOnDelivery: true,
-    });
+          });
+        } else {
+          console.log("error");
+          throw new Error('Failed to save payment details');
+        }
+
   } catch (error) {
     console.error("An error occurred during Cash On Delivery:", error);
     res.status(500).json({

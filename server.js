@@ -5,35 +5,35 @@ const path = require('path');
 const app = require('./app');
 
 
-const DB =
-  "mongodb+srv://Rishu2421:Rishu2421@cluster0.lm2gsfi.mongodb.net/meatgram?retryWrites=true&w=majority";
-mongoose
-  .connect(DB, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() => {
-    console.log(`connection succesfull `);
-  })
-  .catch((err) => {
-    console.log(err);
-  });
+// const DB =
+//   "mongodb+srv://Rishu2421:Rishu2421@cluster0.lm2gsfi.mongodb.net/meatgram?retryWrites=true&w=majority";
+// mongoose
+//   .connect(DB, {
+//     useNewUrlParser: true,
+//     useUnifiedTopology: true,
+//   })
+//   .then(() => {
+//     console.log(`connection succesfull `);
+//   })
+//   .catch((err) => {
+//     console.log(err);
+//   });
 
 
 // Connect to MongoDB
-// mongoose.connect('mongodb://localhost:27017/metagram', {
-//   useNewUrlParser: true,
-//   useUnifiedTopology: true,
-// });
+mongoose.connect('mongodb://localhost:27017/metagram', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 
-// const itemsConnection = mongoose.connection;
-// itemsConnection.on('connected', () => {
-//   console.log('Connected to MongoDB Items database');
-// });
+const itemsConnection = mongoose.connection;
+itemsConnection.on('connected', () => {
+  console.log('Connected to MongoDB Items database');
+});
 
-// itemsConnection.on('error', (error) => {
-//   console.error('Error connecting to MongoDB Items database:', error);
-// });
+itemsConnection.on('error', (error) => {
+  console.error('Error connecting to MongoDB Items database:', error);
+});
 
 
 

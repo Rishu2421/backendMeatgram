@@ -157,7 +157,7 @@ module.exports.savePaymentDetails=async (req,res)=> {
 
         const token = user.generateJWT();
         if (order) {
-            const chatId = '1253242062'; // Replace with your actual chat ID
+          // Replace with your actual chat ID
             const orderedItems = order.items.map((item) => `${item.quantity} x ${item.item.name} \n selectedQuantity: ${item.selectedQuantityAndMrp}`).join('\n');
 
             const message = `New order placed!\nOrder ID: ${order._id}\nOrder Total Amount: ${order.amount}\n\n` +
@@ -167,7 +167,7 @@ module.exports.savePaymentDetails=async (req,res)=> {
             `Ordered Items:\n${orderedItems}\n`+
             `Payment Type : Online paid Payment Id ${razorpay_order_id}`;
    
-            sendTelegramMessage(chatId, message);
+            // sendTelegramMessage(chatId, message);
           return res.status(200).json({
             success: true,
             token,
@@ -251,7 +251,7 @@ module.exports.cashOnDelivery = async (req, res) => {
         await user.save();
 
          if (order) {
-            const chatId = '1253242062'; // Replace with your actual chat ID
+            // Replace with your actual chat ID
             const orderedItems = order.items.map((item) => `${item.quantity} x ${item.item.name} \n selectedQuantity: ${item.selectedQuantityAndMrp}`).join('\n');
     
             const message = `New order placed!\nOrder ID: ${order._id}\nOrder Total Amount: ${order.amount}\n\n` +
@@ -262,7 +262,7 @@ module.exports.cashOnDelivery = async (req, res) => {
             `Payment Type : Cash On delievery`;
 
             
-    sendTelegramMessage(chatId, message);
+    // sendTelegramMessage(chatId, message);
           return res.status(200).json({
             success: true,
              paymentMethod:"CashOnDelivery",

@@ -12,6 +12,7 @@ const categoryRoute = require('./routes/categoriesRoutes');
 const cartRoute = require('./routes/cartRoute');
 const paymentRoute = require('./routes/paymentRoutes.js')
 const orderRoutes = require('./routes/orderRoute');
+const couponRoutes = require('./routes/couponRoutes');
 const passportConfig = require('./config/passport-setup');
 const passport = require('passport');
 const session = require('express-session');
@@ -38,7 +39,7 @@ app.use(cors({
 
 app.use(passport.initialize());
 app.use(passport.session());
-
+app.use('/api/coupon', couponRoutes);
 app.use('/api/user',userRouter);
 app.use('/api/admin', adminRoute);
 app.use('/api/categories',categoryRoute)

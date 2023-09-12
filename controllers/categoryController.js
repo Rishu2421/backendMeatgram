@@ -72,6 +72,15 @@ module.exports.deleteCategory = async (req, res) => {
       category.subcategories = updatedSubcategories;
     } else {
       // Delete the entire category
+       if (category.imageUrl) {
+      const imagePath = path.join(__dirname, '..', 'public', category.imageUrl);
+      fs.unlink(imagePath, (error) => {
+        if (error) {
+          console.error('Error deleting category image file:', error);
+        }
+      });
+    }
+
       await Category.findByIdAndDelete(categoryId);
     }
 
